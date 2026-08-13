@@ -1,0 +1,34 @@
+name: Update Submodule Pointer
+
+on:
+  workflow_dispatch:  # 手动触发
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 主仓库
+        uses: actions/checkout@v4
+        with:
+          submodules: false  # 先不拉取子模块，因为 URL 可能需要修改
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 修改子模块 URL 指向 Fork
+        run: |
+          git submodule set-url libs/hbb_common https://github.com/lichnew/hbb_common.git
+
+      - name: 拉取子模块并切换到指定 commit
+        run: |
+          git submodule update --init --recursive libs/hbb_common
+          cd libs/hbb_common
+          git fetch origin
+          git checkout 940ee35
+          cd ../..
+
+      - name: 提交并推送指针变更
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add libs/hbb_common .gitmodules
+          git commit -m "Update hbb_common to forked version 940ee35" || echo "No changes to commit"
+          git push origin master
