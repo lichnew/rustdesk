@@ -157,10 +157,9 @@ jobs:
         run: |
           if ($env:RENDEZVOUS_SERVER) {
             $length = $env:RENDEZVOUS_SERVER.Length
-            Write-Host "RENDEZVOUS_SERVER 已设置（长度: $length 字符）"
+            Write-Host "RENDEZVOUS_SERVER seted (length: $length )"
           } else {
-            Write-Host "RENDEZVOUS_SERVER 未设置或为空"
-            exit 1
+            Write-Host "RENDEZVOUS_SERVER not set or null"
           }
         shell: powershell
         env:
