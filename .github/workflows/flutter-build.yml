@@ -149,17 +149,20 @@ jobs:
 
       - name: check hbb_common
         run: |
-          ls -la libs/hbb_common/
-          head -140 libs/hbb_common/src/config.rs
+          Get-ChildItem -Path libs/hbb_common -Force
+          Get-Content libs/hbb_common/src/config.rs -Head 140
+        shell: powershell
 
       - name: check RENDEZVOUS_SERVER key
         run: |
-          if [ -n "${{ secrets.RENDEZVOUS_SERVER }}" ]; then
-            echo "RENDEZVOUS_SERVER 已设置（长度: ${#RENDEZVOUS_SERVER} 字符）"
-          else
-            echo "RENDEZVOUS_SERVER 未设置或为空"
+          if ($env:RENDEZVOUS_SERVER) {
+            $length = $env:RENDEZVOUS_SERVER.Length
+            Write-Host "RENDEZVOUS_SERVER 已设置（长度: $length 字符）"
+          } else {
+            Write-Host "RENDEZVOUS_SERVER 未设置或为空"
             exit 1
-          fi
+          }
+        shell: powershell
         env:
           RENDEZVOUS_SERVER: ${{ secrets.RENDEZVOUS_SERVER }}
 
