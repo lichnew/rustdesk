@@ -154,7 +154,8 @@ impl RendezvousMediator {
             let timeout = Arc::new(RwLock::new(CONNECT_TIMEOUT));
             let conn_start_time = Instant::now();
             *SOLVING_PK_MISMATCH.lock().await = "".to_owned();
-            if !config::option2bool("stop-service", &Config::get_option("stop-service"))
+            //if !config::option2bool("stop-service", &Config::get_option("stop-service"))
+            if true
                 && !crate::platform::installing_service()
             {
                 let mut futs = Vec::new();
